@@ -1,6 +1,6 @@
 import imaplib, smtplib, email, getpass
 import os, re, threading, pickle, sys
-import time, datetime, dateutil
+import time, datetime
 import numpy as np
 
 import light_control
