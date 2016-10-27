@@ -3,6 +3,8 @@ import os, re, threading, pickle, sys
 import time, datetime, dateutil
 import numpy as np
 
+import light_control
+
 RECEIVEDFILE = 'received_email_ids.dat'
 
 def isintstring(s):
@@ -84,6 +86,8 @@ def log(server):
 		message = message_from_id(emailid, server)
 		if 'Subject' not in message.keys(): # email threads initiated by a cellphone will not have a subject line
 			print message
+			light_control.turn_light_off()
+		read_email_ids += [emailid]
 	write_read_email_ids(read_email_ids)
 
 
@@ -98,6 +102,7 @@ class Receive(object):
 		except Exception as e:
 			print e
 			self.abort = True
+		light_control.setup()
 
 	def update_server(self):
 		if not self.server:
@@ -117,7 +122,7 @@ class Receive(object):
 			log(self.server)
 
 if __name__=='__main__':
-	# USERNAME = getpass.getpass("Enter your Gmail username: ")
-	# PASSWORD = getpass.getpass("Enter your Gmail password: ")
-	receiver = Receive('rex.garland', 'gknajbqxfqdqbbtm')
+	USERNAME = getpass.getpass("Enter your Gmail username: ")
+	PASSWORD = getpass.getpass("Enter your Gmail password: ")
+	receiver = Receive(USERNAME, PASSWORD)
 	receiver.run()
